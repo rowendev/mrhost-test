@@ -21,7 +21,7 @@ const dummy_data = [
     img: img1,
     conditions: {
       freeWifi: true,
-      noSmoke: false,
+      noSmoke: true,
       kitchen: false,
       laundry: false,
       parking: false,
@@ -79,7 +79,7 @@ const dummy_data = [
       kitchen: false,
       laundry: true,
       parking: true,
-      petFriendly: true,
+      petFriendly: false,
     },
   },
   {
@@ -92,45 +92,101 @@ const dummy_data = [
     id: "5",
     img: img5,
     conditions: {
-      freeWifi: true,
+      freeWifi: false,
       noSmoke: false,
       kitchen: true,
       laundry: false,
       parking: true,
-      petFriendly: true,
+      petFriendly: false,
     },
   },
+];
+const filter = [
+  "freeWifi",
+  "noSmoke",
+  "kitchen",
+  "laundry",
+  "parking",
+  "petFriendly",
 ];
 
 function Hotels({ tags, conditions }) {
   const [sort, setSort] = useState("為您精選");
   const [hotels, setHotels] = useState(dummy_data);
   const [newHotel, setNewHotel] = useState([]);
-
+  // 隨機排序hotels
   const handleChange = (event) => {
+    // 設定使用者選擇的排序方式
     setSort(event.target.value);
     const shuffleArray = (arr) => arr.sort(() => 0.5 - Math.random());
     shuffleArray(hotels);
   };
-
-  useEffect(() => {});
+  let updatedHotels = [];
 
   useEffect(() => {
-    // 篩選條件的陣列: [false, false, false, false, false, false]
-    // 物件條件的物件使用Object.values()轉換後 => [true, true, true, false, false, false]
-    const updatedHotels = [];
-    for (let index = 0; index < hotels.length; index++) {
-      const arr = Object.values(hotels[index].conditions);
-      // console.log(JSON.stringify(arr));
-      // console.log(Object.keys(hotels[index].conditions));
-      // console.log(JSON.stringify(conditions));
-      if (JSON.stringify(arr) === JSON.stringify(conditions)) {
-        updatedHotels.push(hotels[index]);
-      } else {
-      }
-    }
+    conditions.map((each, index) => {
+      if (each) {
+        console.log("要過濾的條件:", filter[index]);
+        switch (filter[index]) {
+          case "freeWifi":
+            console.log("freewifi判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.freeWifi) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
+          case "noSmoke":
+            console.log("noSmoke判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.noSmoke) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
+          case "kitchen":
+            console.log("kitchen判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.kitchen) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
+          case "laundry":
+            console.log("laundry判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.laundry) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
+          case "parking":
+            console.log("parking判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.parking) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
+          case "petFriendly":
+            console.log("petFriendly判斷區");
+            hotels.map((hotel) => {
+              if (hotel.conditions.petFriendly) {
+                updatedHotels.push(hotel);
+              }
+            });
+            break;
 
+          default:
+            break;
+        }
+      }
+    });
     setNewHotel(updatedHotels);
+
+    // return () => {
+    //   const updatedHotels = [];
+    // };
   }, [conditions]);
 
   return (
@@ -169,11 +225,6 @@ function Hotels({ tags, conditions }) {
           ))}
         </div>
       )}
-      {/* <div className="hotels_item">
-        {hotels.map((hotel) => (
-          <HotelItem data={hotel} key={hotel.id} />
-        ))}
-      </div> */}
     </div>
   );
 }
