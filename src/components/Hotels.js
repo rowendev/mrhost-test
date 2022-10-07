@@ -109,6 +109,8 @@ function Hotels({ tags, conditions }) {
 
   const handleChange = (event) => {
     setSort(event.target.value);
+    const shuffleArray = (arr) => arr.sort(() => 0.5 - Math.random());
+    shuffleArray(hotels);
   };
 
   useEffect(() => {});
@@ -119,12 +121,12 @@ function Hotels({ tags, conditions }) {
     const updatedHotels = [];
     for (let index = 0; index < hotels.length; index++) {
       const arr = Object.values(hotels[index].conditions);
-
+      // console.log(JSON.stringify(arr));
+      // console.log(Object.keys(hotels[index].conditions));
+      // console.log(JSON.stringify(conditions));
       if (JSON.stringify(arr) === JSON.stringify(conditions)) {
-        console.log("條件符合");
         updatedHotels.push(hotels[index]);
       } else {
-        console.log("條件不符");
       }
     }
 
@@ -148,6 +150,8 @@ function Hotels({ tags, conditions }) {
             inputProps={{ "aria-label": "Without label" }}
           >
             <MenuItem value="為您精選">為您精選</MenuItem>
+            <MenuItem value="附近住宿">附近住宿</MenuItem>
+            <MenuItem value="評價最高">評價最高</MenuItem>
           </Select>
         </FormControl>
       </div>
