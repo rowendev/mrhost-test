@@ -19,12 +19,14 @@ const dummy_data = [
     price: 1733,
     id: "1",
     img: img1,
-    freeWifi: false,
-    noSmoke: true,
-    kitchen: false,
-    laundry: false,
-    parking: true,
-    pet: true,
+    conditions: {
+      freeWifi: true,
+      noSmoke: false,
+      kitchen: false,
+      laundry: false,
+      parking: false,
+      petFriendly: false,
+    },
   },
   {
     title: "德立莊昆明館",
@@ -35,12 +37,14 @@ const dummy_data = [
     price: 1040,
     id: "2",
     img: img2,
-    freeWifi: true,
-    noSmoke: true,
-    kitchen: true,
-    laundry: false,
-    parking: true,
-    pet: false,
+    conditions: {
+      freeWifi: true,
+      noSmoke: true,
+      kitchen: false,
+      laundry: true,
+      parking: true,
+      petFriendly: true,
+    },
   },
   {
     title: "鳳凰閣溫泉旅店",
@@ -51,12 +55,14 @@ const dummy_data = [
     price: 2682,
     id: "3",
     img: img3,
-    freeWifi: true,
-    noSmoke: true,
-    kitchen: true,
-    laundry: false,
-    parking: false,
-    pet: true,
+    conditions: {
+      freeWifi: true,
+      noSmoke: true,
+      kitchen: true,
+      laundry: true,
+      parking: true,
+      petFriendly: false,
+    },
   },
   {
     title: "城市商旅-南東館",
@@ -67,12 +73,14 @@ const dummy_data = [
     price: 2800,
     id: "4",
     img: img4,
-    freeWifi: true,
-    noSmoke: true,
-    kitchen: false,
-    laundry: true,
-    parking: true,
-    pet: true,
+    conditions: {
+      freeWifi: true,
+      noSmoke: true,
+      kitchen: false,
+      laundry: true,
+      parking: true,
+      petFriendly: true,
+    },
   },
   {
     title: "天雲旅棧台北西門",
@@ -83,29 +91,53 @@ const dummy_data = [
     price: 3200,
     id: "5",
     img: img5,
-    freeWifi: true,
-    noSmoke: true,
-    kitchen: false,
-    laundry: true,
-    parking: true,
-    pet: false,
+    conditions: {
+      freeWifi: true,
+      noSmoke: false,
+      kitchen: true,
+      laundry: false,
+      parking: true,
+      petFriendly: true,
+    },
   },
 ];
 
-function Hotels({ tags }) {
+function Hotels({ tags, conditions }) {
   const [sort, setSort] = useState("為您精選");
   const [hotels, setHotels] = useState(dummy_data);
   const [newHotel, setNewHotel] = useState([]);
+
   const handleChange = (event) => {
     setSort(event.target.value);
   };
 
-  // tags => array
+  useEffect(() => {});
+
+  useEffect(() => {
+    // 篩選條件的陣列: [false, false, false, false, false, false]
+    // 物件條件的物件使用Object.values()轉換後 => [true, true, true, false, false, false]
+    const updatedHotels = [];
+    for (let index = 0; index < hotels.length; index++) {
+      const arr = Object.values(hotels[index].conditions);
+
+      if (JSON.stringify(arr) === JSON.stringify(conditions)) {
+        console.log("條件符合");
+        updatedHotels.push(hotels[index]);
+      } else {
+        console.log("條件不符");
+      }
+    }
+
+    setNewHotel(updatedHotels);
+  }, [conditions]);
+
   return (
     <div className="hotels">
       {/* 標題 */}
       <div className="hotels_heading">
-        <h1>找到 56 間住宿</h1>
+        <h1>
+          找到 {newHotel.length !== 0 ? newHotel.length : hotels.length} 間住宿
+        </h1>
         <h4>{tags}</h4>
         <FormControl>
           <Select
@@ -120,7 +152,7 @@ function Hotels({ tags }) {
         </FormControl>
       </div>
       {/* 飯店物件 */}
-      {/* {filtedHotel.length === 0 ? (
+      {newHotel.length === 0 ? (
         <div className="hotels_item">
           {hotels.map((hotel) => (
             <HotelItem key={hotel.price} data={hotel} />
@@ -128,16 +160,16 @@ function Hotels({ tags }) {
         </div>
       ) : (
         <div className="hotels_item">
-          {filtedHotel.map((hotel) => (
+          {newHotel.map((hotel) => (
             <HotelItem key={hotel.price} data={hotel} />
           ))}
         </div>
-      )} */}
-      <div className="hotels_item">
+      )}
+      {/* <div className="hotels_item">
         {hotels.map((hotel) => (
           <HotelItem data={hotel} key={hotel.id} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }
