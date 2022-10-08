@@ -32,7 +32,7 @@ const dummy_data = [
     title: "德立莊昆明館",
     location: "台北市",
     description:
-      "HOTEL PAPA WHALE，其命名靈感來自海中霸王最大哺乳類動物-鯨魚，象徵如鯨魚自在暢游於藍海中一般，酒店外觀以白色鍍鋅浪板營造出簡約風格，由名設計師操刀將老建築改造，重新堆砌成輕工業風及SOHO都會風的空間，建構出獨樹一格的現代設計風格酒店。捷運西門站及北門站步行即可抵達，為旅客旅行台北及西門町最佳選擇。",
+      "HOTEL PAPA WHALE其命名靈感來自海中霸王最大哺乳類動物-鯨魚,象徵如鯨魚自在暢游於藍海中一般，酒店外觀以白色鍍鋅浪板營造出簡約風格，由名設計師操刀將老建築改造，重新堆砌成輕工業風及SOHO都會風的空間，建構出獨樹一格的現代設計風格酒店。捷運西門站及北門站步行即可抵達，為旅客旅行台北及西門町最佳選擇。",
     rating: "4.1",
     price: 1040,
     id: "2",
@@ -121,59 +121,51 @@ function Hotels({ tags, conditions }) {
     const shuffleArray = (arr) => arr.sort(() => 0.5 - Math.random());
     shuffleArray(hotels);
   };
-  let updatedHotels = [];
 
   useEffect(() => {
+    let updatedHotels = [];
     conditions.map((each, index) => {
       if (each) {
         console.log("要過濾的條件:", filter[index]);
+        if (newHotel.length > 0) {
+          console.log("複選判斷");
+          setHotels(newHotel);
+        }
         switch (filter[index]) {
           case "freeWifi":
             console.log("freewifi判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.freeWifi) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.freeWifi === true;
             });
             break;
           case "noSmoke":
             console.log("noSmoke判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.noSmoke) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.noSmoke === true;
             });
             break;
           case "kitchen":
             console.log("kitchen判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.kitchen) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.kitchen === true;
             });
             break;
           case "laundry":
             console.log("laundry判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.laundry) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.laundry === true;
             });
             break;
           case "parking":
             console.log("parking判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.parking) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.parking === true;
             });
             break;
           case "petFriendly":
             console.log("petFriendly判斷區");
-            hotels.map((hotel) => {
-              if (hotel.conditions.petFriendly) {
-                updatedHotels.push(hotel);
-              }
+            updatedHotels = hotels.filter((hotel) => {
+              return hotel.conditions.petFriendly === true;
             });
             break;
 
@@ -182,11 +174,12 @@ function Hotels({ tags, conditions }) {
         }
       }
     });
+    console.log(updatedHotels);
     setNewHotel(updatedHotels);
 
-    // return () => {
-    //   const updatedHotels = [];
-    // };
+    return () => {
+      setHotels(dummy_data);
+    };
   }, [conditions]);
 
   return (
